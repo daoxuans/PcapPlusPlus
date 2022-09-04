@@ -4,6 +4,7 @@
 #include "TextBasedProtocol.h"
 #include <string>
 #include <exception>
+#include <algorithm>
 
 /// @file
 
@@ -78,7 +79,8 @@ namespace pcpp
 		 * @param[in] port The port number to be checked
 		 * @return True if the port matches those associated with the HTTP protocol
 		 */
-		static bool isHttpPort(uint16_t port) { return port == 80 || port == 8080; }
+		static bool isHttpPort(uint16_t port) { bool exists = std::find(std::begin(m_HttpPorts), std::end(m_HttpPorts), port) != std::end(m_HttpPorts); return exists; }
+		static void setHttpPort(const std::array<uint16_t, 5> &httpPorts) { m_HttpPorts = httpPorts; }
 
 		// overridden methods
 
@@ -88,6 +90,8 @@ namespace pcpp
 		virtual HeaderField* insertField(HeaderField* prevField, const HeaderField& newField);
 
 		OsiModelLayer getOsiModelLayer() const { return OsiModelApplicationLayer; }
+
+		static std::array<uint16_t, 5> m_HttpPorts;
 
 	protected:
 		HttpMessage(uint8_t* data, size_t dataLen, Layer* prevLayer, Packet* packet) : TextBasedProtocolMessage(data, dataLen, prevLayer, packet) {}

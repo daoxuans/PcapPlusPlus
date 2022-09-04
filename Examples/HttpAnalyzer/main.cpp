@@ -587,6 +587,8 @@ int main(int argc, char* argv[])
 		EXIT_WITH_ERROR("Please input a number between 0 to 65535");
 	}
 
+	std::array<uint16_t, 5> httpports = {80, 8880};
+	pcpp::HttpMessage::setHttpPort(httpports);
 	// analyze in pcap file mode
 	if (readPacketsFromPcapFileName != "")
 	{
