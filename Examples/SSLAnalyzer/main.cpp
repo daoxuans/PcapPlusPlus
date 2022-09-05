@@ -550,6 +550,8 @@ int main(int argc, char* argv[])
 	if (readPacketsFromPcapFileName == "" && interfaceNameOrIP == "")
 		EXIT_WITH_ERROR("Neither interface nor input pcap file were provided");
 
+	std::array<uint16_t, 5> httpsports = {443};
+	pcpp::SSLLayer::setHttpsPort(httpsports);
 	// analyze in pcap file mode
 	if (readPacketsFromPcapFileName != "")
 	{

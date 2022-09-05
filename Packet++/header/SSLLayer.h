@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "SSLCommon.h"
 #include "SSLHandshake.h"
+#include <algorithm>
 
 /**
  * @file
@@ -177,6 +178,7 @@ namespace pcpp
 		 * @param[in] port The port number to be checked
 		 */
 		static inline bool isSSLPort(uint16_t port);
+		static void setHttpsPort(const std::array<uint16_t, 5> &httpsPorts) { m_HttpsPorts = httpsPorts; }
 
 		/**
 		 * A static methods that gets raw data of a layer and checks whether this data is a SSL/TLS record or not. This check is
@@ -250,6 +252,8 @@ namespace pcpp
 		void parseNextLayer();
 
 		OsiModelLayer getOsiModelLayer() const { return OsiModelPresentationLayer; }
+
+		static std::array<uint16_t, 5> m_HttpsPorts;
 
 	protected:
 		SSLLayer(uint8_t* data, size_t dataLen, Layer* prevLayer, Packet* packet) : Layer(data, dataLen, prevLayer, packet) { m_Protocol = SSL; }
@@ -530,7 +534,8 @@ namespace pcpp
 
 	bool SSLLayer::isSSLPort(uint16_t port)
 	{
-		if (port == 443) // HTTPS, this is likely case
+		bool exists = std::find(std::begin(m_HttpsPorts), std::end(m_HttpsPorts), port) != std::end(m_HttpsPorts);
+		if (exists) // HTTPS, this is likely case
 			return true;
 
 		switch (port)

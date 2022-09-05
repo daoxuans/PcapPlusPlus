@@ -12,6 +12,7 @@ namespace pcpp
 // ----------------
 // SSLLayer methods
 // ----------------
+std::array<uint16_t, 5> SSLLayer::m_HttpsPorts{443};
 
 bool SSLLayer::IsSSLMessage(uint16_t srcPort, uint16_t dstPort, uint8_t* data, size_t dataLen, bool ignorePorts)
 {

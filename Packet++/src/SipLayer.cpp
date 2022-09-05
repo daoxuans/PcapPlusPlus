@@ -34,6 +34,7 @@ const std::string SipMethodEnumToString[14] = {
 
 
 // -------- Class SipLayer -----------------
+std::array<uint16_t, 5> SipLayer::m_SipPorts{5060, 5061};
 
 int SipLayer::getContentLength() const
 {
