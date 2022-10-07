@@ -182,3 +182,26 @@ PTF_TEST_CASE(IcmpV6EditTest);
 PTF_TEST_CASE(FtpParsingTests);
 PTF_TEST_CASE(FtpCreationTests);
 PTF_TEST_CASE(FtpEditTests);
+
+// Implemented in LLCTests.cpp
+PTF_TEST_CASE(LLCParsingTests);
+PTF_TEST_CASE(LLCCreationTests);
+
+// Implemented in StpTests.cpp
+PTF_TEST_CASE(StpConfigurationParsingTests);
+PTF_TEST_CASE(StpTopologyChangeParsingTests);
+PTF_TEST_CASE(RapidStpParsingTests);
+PTF_TEST_CASE(MultipleStpParsingTests);
+
+// Implemented in SomeIpTests.cpp
+PTF_TEST_CASE(SomeIpPortTest);
+PTF_TEST_CASE(SomeIpParsingTest);
+PTF_TEST_CASE(SomeIpCreationTest);
+PTF_TEST_CASE(SomeIpTpParsingTest);
+PTF_TEST_CASE(SomeIpTpCreationTest);
+PTF_TEST_CASE(SomeIpTpEditTest);
+
+// Implemented in WakeOnLanTests.cpp
+PTF_TEST_CASE(WakeOnLanParsingTests);
+PTF_TEST_CASE(WakeOnLanCreationTests);
+PTF_TEST_CASE(WakeOnLanEditTests);
