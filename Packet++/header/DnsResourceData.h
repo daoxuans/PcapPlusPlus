@@ -343,6 +343,83 @@ namespace pcpp
 		MxData m_Data;
 	};
 
+	/**
+	 * @class SrvDnsResourceData
+	 * A class that represents DNS RR mail exchange (MX) data, used in DNS RRs of type ::DNS_TYPE_SRV
+	 */
+	class SrvDnsResourceData : public IDnsResourceData
+	{
+	public:
+
+		/**
+		 * A struct that represents mail exchange (MX) data
+		 */
+		struct SrvData
+		{
+			uint16_t priority; /* priority of this target host */
+			uint16_t port;
+			uint16_t weight; /* specifies a relative weight for entries with
+								the same priority */
+			std::string target;
+		};
+
+		/**
+		 * A c'tor for this class
+		 * @param[in] dataPtr A byte array that contains the raw MX data (as written in the DNS packet)
+		 * @param[in] dataLen The byte array size
+		 * @param[in] dnsResource A pointer to a DNS resource object where this DNS RR data will be stored
+		 */
+		SrvDnsResourceData(uint8_t* dataPtr, size_t dataLen, IDnsResource* dnsResource);
+
+		/**
+		 * A c'tor for this class
+		 * @param[in] preference The MX preference value to store in this object
+		 * @param[in] mailExchange The MX hostname value to store in this object. It's possible to include a pointer to
+		 * another string in the DNS layer (as explained here: http://www.zytrax.com/books/dns/ch15/#name). These pointers
+		 * are often used to reduce the DNS packet size and avoid unnecessary duplications. The way to include pointers
+		 * in the hostname string is to use the following format: 'some.domain.#{offset}' where '#{offset}' is the offset
+		 * from the start of the DNS layer. For example: if the string 'yahoo.com' already appears in offset 12 in the
+		 * packet and you want to set the DNS RR data as 'my.subdomain.yahoo.com' you may use the following string:
+		 * 'my.subdomain.#12'. This will result in writing 'my.subdomain' and a pointer to offset 12
+		 */
+		SrvDnsResourceData(const uint16_t& priority, const uint16_t& port, const uint16_t& weight, const std::string& target);
+
+		~SrvDnsResourceData() {}
+
+		/**
+		 * Equality operator overload for this class that compares the MX data stored in each object
+		 * @param[in] other The object to compare with
+		 * @return True if MX data is the same in both objects, meaning both preference and MX hostname are the same,
+		 * false otherwise
+		 */
+		bool operator==(const SrvDnsResourceData& other) const;
+
+		/**
+		 * @return The MX data stored in this object
+		 */
+		SrvData getSrvData() const { return m_Data; }
+
+		/**
+		 * Set the MX data stored in this object
+		 * @param[in] preference The MX preference value to store in this object
+		 * @param[in] mailExchange The MX hostname value to store in this object
+		 */
+		void setSrvData(uint16_t priority, uint16_t port, uint16_t weight, std::string target);
+
+		// implement abstract methods
+
+		/**
+		 * A string representation of the MX data stored in this object. The string format is as follows:
+		 * 'pref: {preference_value}; mx: {mail_exchange_hostname_value}'
+		 */
+		std::string toString() const;
+
+		bool toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource* dnsResource) const;
+
+	private:
+		SrvData m_Data;
+	};
+
 
 	/**
 	 * @class GenericDnsResourceData

@@ -320,7 +320,10 @@ DnsResourceDataPtr DnsResource::getData() const
 	{
 		return DnsResourceDataPtr(new StringDnsResourceData(resourceRawData, dataLength, const_cast<IDnsResource*>(static_cast<const IDnsResource*>(this))));
 	}
-
+	case DNS_TYPE_SRV:
+	{	
+		return DnsResourceDataPtr(new SrvDnsResourceData(resourceRawData, dataLength, const_cast<IDnsResource*>(static_cast<const IDnsResource*>(this))));
+	}
 	case DNS_TYPE_MX:
 	{
 		return DnsResourceDataPtr(new MxDnsResourceData(resourceRawData, dataLength, const_cast<IDnsResource*>(static_cast<const IDnsResource*>(this))));
@@ -385,7 +388,15 @@ bool DnsResource::setData(IDnsResourceData* data)
 		}
 		break;
 	}
-
+	case DNS_TYPE_SRV:
+	{
+		if (!data->isTypeOf<SrvDnsResourceData>())
+		{
+			PCPP_LOG_ERROR("DNS record is of type MX but given data isn't of type MxDnsResourceData");
+			return false;
+		}
+		break;
+	}
 	case DNS_TYPE_MX:
 	{
 		if (!data->isTypeOf<MxDnsResourceData>())

@@ -139,6 +139,64 @@ bool MxDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource*
 	return true;
 }
 
+SrvDnsResourceData::SrvDnsResourceData(uint8_t* dataPtr, size_t dataLen, IDnsResource* dnsResource)
+{
+	uint16_t tmppriority = be16toh(*(uint16_t*)dataPtr);
+	uint16_t tmpweight = be16toh(*(uint16_t*)(dataPtr + sizeof(uint16_t)));
+	uint16_t tmpport = be16toh(*(uint16_t*)(dataPtr + sizeof(uint16_t)*2));
+	char tempSrv[256];
+	decodeName((const char*)(dataPtr + sizeof(uint16_t)*3), tempSrv, dnsResource);
+	m_Data.priority = tmppriority;
+	m_Data.port = tmpport;
+	m_Data.weight = tmpweight;
+	m_Data.target = tempSrv;
+}
+
+SrvDnsResourceData::SrvDnsResourceData(const uint16_t& priority, const uint16_t& port, const uint16_t& weight, const std::string& target)
+{
+	m_Data.priority = priority;
+	m_Data.port = port;
+	m_Data.weight = weight;
+	m_Data.target = target;
+}
+
+bool SrvDnsResourceData::operator==(const SrvDnsResourceData& other) const
+{
+	return (m_Data.priority == other.m_Data.priority) &&
+			(m_Data.port == other.m_Data.port) &&
+			(m_Data.weight == other.m_Data.weight) &&
+			(m_Data.target == other.m_Data.target);
+}
+
+void SrvDnsResourceData::setSrvData(uint16_t priority, uint16_t port, uint16_t weight, std::string target)
+{
+	m_Data.priority = priority;
+	m_Data.port = port;
+	m_Data.weight = weight;
+	m_Data.target = target;
+}
+
+std::string SrvDnsResourceData::toString() const
+{
+	std::stringstream result;
+	result << "priority: " << m_Data.priority << "; port: " << m_Data.port << "; weight: " << m_Data.weight << "; target: " << m_Data.target;
+	return result.str();
+}
+
+bool SrvDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource* dnsResource) const
+{
+	uint16_t netOrderpriority = htobe16(m_Data.priority);
+	uint16_t netOrderport = htobe16(m_Data.port);
+	uint16_t netOrderweight = htobe16(m_Data.weight);
+	memcpy(arr, &netOrderpriority, sizeof(uint16_t));
+	memcpy(arr + sizeof(uint16_t), &netOrderweight, sizeof(uint16_t));
+	memcpy(arr + sizeof(uint16_t)*2, &netOrderport, sizeof(uint16_t));
+	encodeName(m_Data.target, (char*)(arr + sizeof(uint16_t)*3), arrLength, dnsResource);
+	arrLength += sizeof(uint16_t)*3;
+
+	return true;
+}
+
 GenericDnsResourceData::GenericDnsResourceData(uint8_t* dataPtr, size_t dataLen)
 {
 	m_Data = NULL;
