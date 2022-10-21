@@ -197,62 +197,6 @@ bool SrvDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource
 	return true;
 }
 
-HinfoDnsResourceData::HinfoDnsResourceData(uint8_t* dataPtr, size_t dataLen, IDnsResource* dnsResource)
-{
-	uint8_t tmpcpulen = *dataPtr;
-	if (tmpcpulen > 0)
-		m_Data.cpu.assign((const char*)(dataPtr + sizeof(uint8_t)), tmpcpulen);
-	uint8_t tmposlen = *(dataPtr + sizeof(uint8_t) + tmpcpulen);
-	if (tmposlen > 0)
-		m_Data.os.assign((const char*)(dataPtr + sizeof(uint8_t) + tmpcpulen + sizeof(uint8_t)), tmposlen);
-	m_Data.cpulen = tmpcpulen;
-	m_Data.oslen = tmposlen;
-}
-
-HinfoDnsResourceData::HinfoDnsResourceData(const uint8_t& cpulen, const uint8_t& oslen, const std::string& cpu, const std::string& os)
-{
-	m_Data.cpulen = cpulen;
-	m_Data.cpu = cpu;
-	m_Data.oslen = oslen;
-	m_Data.os = os;
-}
-
-bool HinfoDnsResourceData::operator==(const HinfoDnsResourceData& other) const
-{
-	return (m_Data.cpulen == other.m_Data.cpulen) &&
-			(m_Data.cpu == other.m_Data.cpu) &&
-			(m_Data.oslen == other.m_Data.oslen) &&
-			(m_Data.os == other.m_Data.os);
-}
-
-void HinfoDnsResourceData::setHinfoData(uint8_t cpulen, uint8_t oslen, std::string cpu, std::string os)
-{
-	m_Data.cpulen = cpulen;
-	m_Data.cpu = cpu;
-	m_Data.oslen = oslen;
-	m_Data.os = os;
-}
-
-std::string HinfoDnsResourceData::toString() const
-{
-	std::stringstream result;
-	result << "cpulen: " << +m_Data.cpulen << "; cpu: " << m_Data.cpu << "; oslen: " << +m_Data.oslen << "; os: " << m_Data.os;
-	return result.str();
-}
-
-bool HinfoDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource* dnsResource) const
-{
-	uint8_t netOrdercpulen = m_Data.cpulen;
-	uint8_t netOrderoslen = m_Data.oslen;
-	memcpy(arr, &netOrdercpulen, sizeof(uint8_t));
-	memcpy(arr + sizeof(uint8_t), m_Data.cpu.c_str(), m_Data.cpu.length());
-	memcpy(arr + sizeof(uint8_t) + m_Data.cpu.length(), &netOrderoslen, sizeof(uint8_t));
-	memcpy(arr + sizeof(uint8_t) * 2 + m_Data.cpu.length(), m_Data.os.c_str(), m_Data.os.length());
-	arrLength = sizeof(uint8_t) * 2 + m_Data.cpu.length() + m_Data.os.length();
-
-	return true;
-}
-
 GenericDnsResourceData::GenericDnsResourceData(uint8_t* dataPtr, size_t dataLen)
 {
 	m_Data = NULL;
