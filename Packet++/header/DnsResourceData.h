@@ -503,6 +503,58 @@ namespace pcpp
 	};
 
 	/**
+	 * @class SrvDnsResourceData
+	 * A class that represents DNS RR mail exchange (MX) data, used in DNS RRs of type ::DNS_TYPE_SRV
+	 */
+	class TxtDnsResourceData : public IDnsResourceData
+	{
+	public:
+
+
+		/**
+		 * A c'tor for this class
+		 * @param[in] dataPtr A byte array that contains the raw MX data (as written in the DNS packet)
+		 * @param[in] dataLen The byte array size
+		 * @param[in] dnsResource A pointer to a DNS resource object where this DNS RR data will be stored
+		 */
+		TxtDnsResourceData(uint8_t* dataPtr, size_t dataLen, IDnsResource* dnsResource);
+		TxtDnsResourceData(const std::string& dataAsHexString);
+
+		~TxtDnsResourceData() {if (m_Data != NULL) delete [] m_Data;}
+
+		/**
+		 * Equality operator overload for this class that compares the MX data stored in each object
+		 * @param[in] other The object to compare with
+		 * @return True if MX data is the same in both objects, meaning both preference and MX hostname are the same,
+		 * false otherwise
+		 */
+		bool operator==(const TxtDnsResourceData& other) const;
+
+		/**
+		 * @return The MX data stored in this object
+		 */
+		//std::string getTxtRawData() const { return m_Data; }
+		std::vector<std::string> getTxtData() const { return m_txtinfo; }
+		//std::map<std::string, std::string> getTxtData() const { return Fields; }
+
+
+		// implement abstract methods
+
+		/**
+		 * A string representation of the MX data stored in this object. The string format is as follows:
+		 * 'pref: {preference_value}; mx: {mail_exchange_hostname_value}'
+		 */
+		std::string toString() const;
+
+		bool toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource* dnsResource) const;
+
+	private:
+		uint8_t* m_Data;
+		size_t m_DataLen;
+		std::vector<std::string> m_txtinfo;
+	};
+
+	/**
 	 * @class GenericDnsResourceData
 	 * A class that represents generic DNS RR data which cannot be represented in any of the other classes. It stores the
 	 * DNS RR data as byte array

@@ -253,6 +253,73 @@ bool HinfoDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResour
 	return true;
 }
 
+TxtDnsResourceData::TxtDnsResourceData(uint8_t* dataPtr, size_t dataLen, IDnsResource* dnsResource)
+{
+	m_Data = NULL;
+	m_DataLen = 0;
+	if (dataLen > 0 && dataPtr != NULL)
+	{
+		m_DataLen = dataLen;
+		m_Data = new uint8_t[dataLen];
+		memcpy(m_Data, dataPtr, dataLen);
+	}
+
+	uint8_t txtLenCur = 0;
+	uint8_t* txtPtrCur = dataPtr;
+	std::string txtDataCur;
+	txtLenCur = *(dataPtr) + 0;
+	//std::cout << "txtLenCur: " << +txtLenCur << "dataLen: " << dataLen << std::endl;
+	
+	while (dataLen != 0 && txtPtrCur != NULL) {
+		txtLenCur = *txtPtrCur + 0;
+		txtPtrCur += sizeof(uint8_t);
+		txtDataCur.assign((const char*)(txtPtrCur), txtLenCur);
+		//std::cout << "txtLenCur: " << +txtLenCur << "dataLen: " << dataLen << "txtDataCur: "<< txtDataCur << std::endl;
+		m_txtinfo.push_back(txtDataCur);
+		txtPtrCur += txtLenCur;
+		dataLen -= 1;
+		dataLen -= txtLenCur;
+	}
+}
+
+TxtDnsResourceData::TxtDnsResourceData(const std::string& dataAsHexString)
+{
+	m_Data = NULL;
+	uint8_t tempDataArr[2048];
+	m_DataLen = hexStringToByteArray(dataAsHexString, tempDataArr, 2048);
+	if (m_DataLen != 0)
+	{
+		m_Data = new uint8_t[m_DataLen];
+		memcpy(m_Data, tempDataArr, m_DataLen);
+	}
+}
+
+bool TxtDnsResourceData::operator==(const TxtDnsResourceData& other) const
+{
+	if (m_DataLen != other.m_DataLen)
+		return false;
+
+	return (memcmp(m_Data, other.m_Data, m_DataLen) == 0);
+}
+
+std::string TxtDnsResourceData::toString() const
+{
+	return byteArrayToHexString(m_Data, m_DataLen);
+}
+
+bool TxtDnsResourceData::toByteArr(uint8_t* arr, size_t& arrLength, IDnsResource* dnsResource) const
+{
+	if (m_DataLen == 0 || m_Data == NULL)
+	{
+		PCPP_LOG_ERROR("Input data is null or illegal");
+		return false;
+	}
+
+	arrLength = m_DataLen;
+	memcpy(arr, m_Data, m_DataLen);
+	return true;
+}
+
 GenericDnsResourceData::GenericDnsResourceData(uint8_t* dataPtr, size_t dataLen)
 {
 	m_Data = NULL;
