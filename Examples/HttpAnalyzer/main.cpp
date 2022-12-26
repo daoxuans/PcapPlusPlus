@@ -134,7 +134,7 @@ void listInterfaces()
 }
 
 
-void printStatsHeadline(std::string description)
+void printStatsHeadline(const std::string &description)
 {
 	std::string underline;
 	for (size_t i = 0; i < description.length(); i++)
@@ -574,18 +574,10 @@ int main(int argc, char* argv[])
 	if (readPacketsFromPcapFileName == "" && interfaceNameOrIP == "")
 		EXIT_WITH_ERROR("Neither interface nor input pcap file were provided");
 
-	//get the port
-	std::istringstream is(port);
-	uint16_t nPort = -1;
-	is >> nPort;
-	if (is.fail())
-	{
+	// get the port
+	int nPort = atoi(port.c_str());
+	if (nPort <= 0 || nPort > 65535)
 		EXIT_WITH_ERROR("Please input a number between 0 to 65535");
-	}
-	if (nPort < 0 || nPort > 65535)
-	{
-		EXIT_WITH_ERROR("Please input a number between 0 to 65535");
-	}
 
 	std::array<uint16_t, 5> httpports = {80, 8880};
 	pcpp::HttpMessage::setHttpPort(httpports);

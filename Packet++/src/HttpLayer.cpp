@@ -369,7 +369,7 @@ void HttpRequestFirstLine::parseVersion()
 	}
 
 	// verify packet doesn't end before the version, meaning still left place for " HTTP/x.y" (9 chars)
-	if ((uint16_t)(verPos + 9 - (char*)m_HttpRequest->m_Data) > m_HttpRequest->getDataLen())
+	if ((verPos + 9 - (char*)m_HttpRequest->m_Data) > m_HttpRequest->getDataLen())
 	{
 		m_Version = HttpVersionUnknown;
 		m_VersionOffset = -1;
@@ -721,7 +721,7 @@ HttpResponseLayer& HttpResponseLayer::operator=(const HttpResponseLayer& other)
 }
 
 
-HeaderField* HttpResponseLayer::setContentLength(int contentLength, const std::string prevFieldName)
+HeaderField* HttpResponseLayer::setContentLength(int contentLength, const std::string &prevFieldName)
 {
 	std::ostringstream contentLengthAsString;
 	contentLengthAsString << contentLength;
@@ -794,7 +794,7 @@ int HttpResponseFirstLine::getStatusCodeAsInt() const
 std::string HttpResponseFirstLine::getStatusCodeString() const
 {
 	std::string result;
-	int statusStringOffset = 13;
+	const int statusStringOffset = 13;
 	if (m_StatusCode != HttpResponseLayer::HttpStatusCodeUnknown)
 	{
 		int statusStringEndOffset = m_FirstLineEndOffset - 2;

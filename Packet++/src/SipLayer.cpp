@@ -46,7 +46,7 @@ int SipLayer::getContentLength() const
 	return 0;
 }
 
-HeaderField* SipLayer::setContentLength(int contentLength, const std::string prevFieldName)
+HeaderField* SipLayer::setContentLength(int contentLength, const std::string &prevFieldName)
 {
 	std::ostringstream contentLengthAsString;
 	contentLengthAsString << contentLength;
@@ -754,7 +754,7 @@ int SipResponseFirstLine::getStatusCodeAsInt() const
 std::string SipResponseFirstLine::getStatusCodeString() const
 {
 	std::string result;
-	int statusStringOffset = 12;
+	const int statusStringOffset = 12;
 	if (m_StatusCode != SipResponseLayer::SipStatusCodeUnknown)
 	{
 		int statusStringEndOffset = m_FirstLineEndOffset - 2;

@@ -351,7 +351,7 @@ namespace pcpp
 		 * @return A pointer to the message of the requested type, NULL if not found
 		 */
 		template<class THandshakeMessage>
-		THandshakeMessage* getNextHandshakeMessageOfType(SSLHandshakeMessage* after) const;
+		THandshakeMessage* getNextHandshakeMessageOfType(const SSLHandshakeMessage* after) const;
 
 		// implement abstract methods
 
@@ -501,7 +501,7 @@ namespace pcpp
 
 
 	template<class THandshakeMessage>
-	THandshakeMessage* SSLHandshakeLayer::getNextHandshakeMessageOfType(SSLHandshakeMessage* after) const
+	THandshakeMessage* SSLHandshakeLayer::getNextHandshakeMessageOfType(const SSLHandshakeMessage* after) const
 	{
 		size_t vecSize = m_MessageList.size();
 		size_t afterIndex;

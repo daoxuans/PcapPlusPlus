@@ -41,7 +41,7 @@ static struct option IcmpFTOptions[] =
 	} while(0)
 
 
-void printUsage(std::string thisSide, std::string otherSide)
+void printUsage(const std::string &thisSide, const std::string &otherSide)
 {
 	std::string messagesPerSecShort = (thisSide == "pitcher") ? "[-p messages_per_sec] " : "";
 	std::string messagesPerSecLong = (thisSide == "pitcher") ? "    -p messages_per_sec  : Set number of messages to be sent per seconds. Default is max possible speed\n" : "";
@@ -100,7 +100,7 @@ void listInterfaces()
 
 
 void readCommandLineArguments(int argc, char* argv[],
-		std::string thisSide, std::string otherSide,
+		const std::string &thisSide, const std::string &otherSide,
 		bool& sender, bool& receiver,
 		pcpp::IPv4Address& myIP, pcpp::IPv4Address& otherSideIP,
 		std::string& fileNameToSend,

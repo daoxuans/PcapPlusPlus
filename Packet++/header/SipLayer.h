@@ -96,7 +96,7 @@ namespace pcpp
 		 * @param[in] prevFieldName Optional parameter, if specified and "Content-Length" field doesn't exist, it will be created after this field
 		 * @return A pointer to the "Content-Length" field, or NULL if creation failed
 		 */
-		HeaderField* setContentLength(int contentLength, const std::string prevFieldName = "");
+		HeaderField* setContentLength(int contentLength, const std::string &prevFieldName = "");
 
 		// Overridden methods
 
@@ -429,7 +429,7 @@ namespace pcpp
 		 * @param[in] sipVersion SIP version to set, default is SIP/2.0
 		 *
 		 */
-		SipResponseLayer(SipResponseLayer::SipResponseStatusCode statusCode, std::string statusCodeString = "", std::string sipVersion = "SIP/2.0");
+		explicit SipResponseLayer(SipResponseLayer::SipResponseStatusCode statusCode, std::string statusCodeString = "", std::string sipVersion = "SIP/2.0");
 
 		virtual ~SipResponseLayer();
 
@@ -537,7 +537,7 @@ namespace pcpp
 		{
 		public:
 			~SipRequestFirstLineException() throw() {}
-			void setMessage(std::string message) { m_Message = message; }
+			void setMessage(const std::string &message) { m_Message = message; }
 			virtual const char* what() const throw()
 			{
 				return m_Message.c_str();
@@ -652,7 +652,7 @@ namespace pcpp
 		{
 		public:
 			~SipResponseFirstLineException() throw() {}
-			void setMessage(std::string message) { m_Message = message; }
+			void setMessage(const std::string &message) { m_Message = message; }
 			virtual const char* what() const throw()
 			{
 				return m_Message.c_str();

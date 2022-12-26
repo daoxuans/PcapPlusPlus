@@ -87,6 +87,7 @@ int main(int argc, char* argv[])
 	// The logger singleton looks like a memory leak. Invoke it before starting the memory check
 	pcpp::Logger::getInstance();
 
+	// cppcheck-suppress knownConditionTrueFalse
 	if (skipMemLeakCheck)
 	{
 		if (configTags != "")
@@ -277,6 +278,9 @@ int main(int argc, char* argv[])
 	PTF_RUN_TEST(SomeIpTpParsingTest, "someip");
 	PTF_RUN_TEST(SomeIpTpCreationTest, "someip");
 	PTF_RUN_TEST(SomeIpTpEditTest, "someip");
+
+	PTF_RUN_TEST(SomeIpSdParsingTest, "someipsd");
+	PTF_RUN_TEST(SomeIpSdCreationTest, "someipsd");
 
 	PTF_RUN_TEST(WakeOnLanParsingTests, "wol");
 	PTF_RUN_TEST(WakeOnLanCreationTests, "wol");

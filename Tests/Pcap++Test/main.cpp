@@ -145,6 +145,7 @@ int main(int argc, char* argv[])
 	// The logger singleton looks like a memory leak. Invoke it before starting the memory check
 	pcpp::Logger::getInstance();
 
+	// cppcheck-suppress knownConditionTrueFalse
 	if (skipMemLeakCheck)
 	{
 		if (configTags != "")
@@ -174,7 +175,7 @@ int main(int argc, char* argv[])
 
 	if (PcapTestGlobalArgs.debugMode)
 	{
-		pcpp::Logger::getInstance().setAllModlesToLogLevel(pcpp::Logger::Debug);
+		pcpp::Logger::getInstance().setAllModulesToLogLevel(pcpp::Logger::Debug);
 	}
 
 	std::cout << "PcapPlusPlus version: " << pcpp::getPcapPlusPlusVersionFull() << std::endl
