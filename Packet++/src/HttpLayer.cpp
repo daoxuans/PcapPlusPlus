@@ -13,7 +13,7 @@ namespace pcpp
 
 
 // -------- Class HttpMessage -----------------
-std::array<uint16_t, 5> HttpMessage::m_HttpPorts{80, 8080};
+std::vector<uint16_t> HttpMessage::m_HttpPorts{80, 8080};
 
 
 HeaderField* HttpMessage::addField(const std::string& fieldName, const std::string& fieldValue)

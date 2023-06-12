@@ -5,6 +5,7 @@
 #include <string>
 #include <exception>
 #include <algorithm>
+#include <vector>
 
 /// @file
 
@@ -80,7 +81,7 @@ namespace pcpp
 		 * @return True if the port matches those associated with the HTTP protocol
 		 */
 		static bool isHttpPort(uint16_t port) { bool exists = std::find(std::begin(m_HttpPorts), std::end(m_HttpPorts), port) != std::end(m_HttpPorts); return exists; }
-		static void setHttpPort(const std::array<uint16_t, 5> &httpPorts) { m_HttpPorts = httpPorts; }
+		static void setHttpPort(const std::vector<uint16_t> &httpPorts) { m_HttpPorts = httpPorts; }
 
 		// overridden methods
 
@@ -91,7 +92,7 @@ namespace pcpp
 
 		OsiModelLayer getOsiModelLayer() const { return OsiModelApplicationLayer; }
 
-		static std::array<uint16_t, 5> m_HttpPorts;
+		static std::vector<uint16_t> m_HttpPorts;
 
 	protected:
 		HttpMessage(uint8_t* data, size_t dataLen, Layer* prevLayer, Packet* packet) : TextBasedProtocolMessage(data, dataLen, prevLayer, packet) {}

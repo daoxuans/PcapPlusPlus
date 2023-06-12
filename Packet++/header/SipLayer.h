@@ -3,6 +3,7 @@
 
 #include "TextBasedProtocol.h"
 #include <algorithm>
+#include <vector>
 
 /// @file
 
@@ -118,9 +119,9 @@ namespace pcpp
 		 * @param[in] port The port number to be checked
 		 */
 		static bool isSipPort(uint16_t port) { bool exists = std::find(std::begin(m_SipPorts), std::end(m_SipPorts), port) != std::end(m_SipPorts); return exists; }
-		static void setSipPort(const std::array<uint16_t, 5> &sipPorts) { m_SipPorts = sipPorts; }
+		static void setSipPort(const std::vector<uint16_t> &sipPorts) { m_SipPorts = sipPorts; }
 
-		static std::array<uint16_t, 5> m_SipPorts;
+		static std::vector<uint16_t> m_SipPorts;
 
 	protected:
 		SipLayer(uint8_t* data, size_t dataLen, Layer* prevLayer, Packet* packet) : TextBasedProtocolMessage(data, dataLen, prevLayer, packet) {}
